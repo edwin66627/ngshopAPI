@@ -29,7 +29,19 @@ public class CategoryServiceImpl implements CategoryService {
         return categories.stream().map(this::convertToCategoryDTO).collect(Collectors.toList());
     }
 
+    @Override
+    public CategoryDTO createCategory(CategoryDTO categoryDTO) {
+        Category category = convertToCategory(categoryDTO);
+        Category categorySaved = categoryRepository.save(category);
+        return convertToCategoryDTO(categorySaved);
+    }
+
     private CategoryDTO convertToCategoryDTO(Category category){
         return modelMapper.map(category,CategoryDTO.class);
     }
+
+    private Category convertToCategory(CategoryDTO categoryDTO){
+        return modelMapper.map(categoryDTO, Category.class);
+    }
+
 }
