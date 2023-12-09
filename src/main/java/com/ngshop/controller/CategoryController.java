@@ -1,7 +1,10 @@
 package com.ngshop.controller;
 
+import com.ngshop.constant.ResponseMessage;
 import com.ngshop.dto.CategoryDTO;
+import com.ngshop.entity.HttpResponse;
 import com.ngshop.service.CategoryService;
+import com.ngshop.utils.ResponseUtility;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -38,5 +41,12 @@ public class CategoryController {
     private ResponseEntity<CategoryDTO> createCategory(@Valid @RequestBody CategoryDTO categoryDTO){
         return new ResponseEntity<>(categoryService.createCategory(categoryDTO), CREATED);
     }
+
+    @PutMapping("/{categoryId}")
+    private ResponseEntity<HttpResponse> updateCategory(@Valid @RequestBody CategoryDTO categoryDTO, @PathVariable Long categoryId){
+        categoryService.updateCategory(categoryDTO,categoryId);
+        return ResponseUtility.buildResponse(String.format(ResponseMessage.UPDATE_SUCCESS, "Category"), OK);
+    }
+
 
 }
