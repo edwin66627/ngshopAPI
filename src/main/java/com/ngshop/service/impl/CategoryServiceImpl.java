@@ -1,6 +1,6 @@
 package com.ngshop.service.impl;
 
-import com.ngshop.ExceptionMessage;
+import com.ngshop.constant.ExceptionMessage;
 import com.ngshop.dto.CategoryDTO;
 import com.ngshop.entity.Category;
 import com.ngshop.repository.CategoryRepository;
@@ -45,6 +45,25 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = convertToCategory(categoryDTO);
         Category categorySaved = categoryRepository.save(category);
         return convertToCategoryDTO(categorySaved);
+    }
+
+    @Override
+    public void updateCategory(CategoryDTO categoryDTO, Long categoryId) {
+        Category category = categoryRepository.findById(categoryId).orElseThrow(
+                () -> new NoSuchElementException(String.format(ExceptionMessage.NO_SUCH_ELEMENT, "Category", categoryId)));
+
+        category.setName(categoryDTO.getName());
+        category.setColor(categoryDTO.getColor());
+        category.setIcon(categoryDTO.getIcon());
+        categoryRepository.save(category);
+    }
+
+    @Override
+    public void deleteCategory(Long categoryId) {
+        Category category = categoryRepository.findById(categoryId).orElseThrow(
+                () -> new NoSuchElementException(String.format(ExceptionMessage.NO_SUCH_ELEMENT, "Category", categoryId)));
+
+        categoryRepository.deleteById(categoryId);
     }
 
     private CategoryDTO convertToCategoryDTO(Category category){
