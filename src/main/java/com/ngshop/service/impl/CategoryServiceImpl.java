@@ -58,6 +58,14 @@ public class CategoryServiceImpl implements CategoryService {
         categoryRepository.save(category);
     }
 
+    @Override
+    public void deleteCategory(Long categoryId) {
+        Category category = categoryRepository.findById(categoryId).orElseThrow(
+                () -> new NoSuchElementException(String.format(ExceptionMessage.NO_SUCH_ELEMENT, "Category", categoryId)));
+
+        categoryRepository.deleteById(categoryId);
+    }
+
     private CategoryDTO convertToCategoryDTO(Category category){
         return modelMapper.map(category,CategoryDTO.class);
     }
