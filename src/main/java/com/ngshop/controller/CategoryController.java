@@ -29,6 +29,11 @@ public class CategoryController {
         return new ResponseEntity<>(categories, OK);
     }
 
+    @GetMapping("/{categoryId}")
+    private ResponseEntity<CategoryDTO> getCategory(@PathVariable Long categoryId){
+        return new ResponseEntity<>(categoryService.getCategory(categoryId), OK);
+    }
+
     @PostMapping("/new")
     private ResponseEntity<CategoryDTO> createCategory(@Valid @RequestBody CategoryDTO categoryDTO){
         return new ResponseEntity<>(categoryService.createCategory(categoryDTO), CREATED);
