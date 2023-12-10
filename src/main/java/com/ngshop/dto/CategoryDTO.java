@@ -1,10 +1,14 @@
 package com.ngshop.dto;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.ngshop.entity.Product;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -16,4 +20,7 @@ public class CategoryDTO {
     private String name;
     private String color;
     private String icon;
+    @JsonBackReference
+    private List<ProductDTO> products;
+
 }

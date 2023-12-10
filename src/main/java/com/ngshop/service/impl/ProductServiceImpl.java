@@ -11,19 +11,25 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
-    private CategoryRepository categoryRepository;
     private ModelMapper modelMapper;
 
     @Autowired
-    public ProductServiceImpl(ProductRepository productRepository, CategoryRepository categoryRepository, ModelMapper modelMapper) {
+    public ProductServiceImpl(ProductRepository productRepository, ModelMapper modelMapper) {
         this.productRepository = productRepository;
-        this.categoryRepository = categoryRepository;
         this.modelMapper = modelMapper;
+    }
+
+    @Override
+    public List<ProductDTO> listProducts() {
+        List<Product> products = productRepository.findAll();
+        return products.stream().map(this::convertToProductDTO).collect(Collectors.toList());
     }
 
     @Override
