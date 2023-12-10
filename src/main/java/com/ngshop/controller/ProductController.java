@@ -1,7 +1,10 @@
 package com.ngshop.controller;
 
+import com.ngshop.constant.ResponseMessage;
 import com.ngshop.dto.ProductDTO;
+import com.ngshop.entity.HttpResponse;
 import com.ngshop.service.ProductService;
+import com.ngshop.utils.ResponseUtility;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -37,4 +40,17 @@ public class ProductController {
     private ResponseEntity<ProductDTO> createProduct(@Valid @RequestBody ProductDTO productDTO){
         return new ResponseEntity<>(productService.createProduct(productDTO), CREATED);
     }
+
+    @PutMapping("/{productId}")
+    private ResponseEntity<HttpResponse> updateProduct(@Valid @RequestBody ProductDTO productDTO, @PathVariable Long productId){
+        productService.updateProduct(productDTO,productId);
+        return ResponseUtility.buildResponse(String.format(ResponseMessage.UPDATE_SUCCESS, "Product"), OK);
+    }
+
+    @DeleteMapping("/{productId}")
+    private ResponseEntity<HttpResponse> deleteProduct(@PathVariable Long productId){
+        productService.deleteProduct(productId);
+        return ResponseUtility.buildResponse(String.format(ResponseMessage.DELETE_SUCCESS, "Product"), OK);
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.ngshop.dto;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.ngshop.entity.Category;
 import jakarta.validation.constraints.NotEmpty;
@@ -34,7 +35,7 @@ public class ProductDTO {
     private boolean isFeatured;
     private Date createdDate;
     private Long categoryId;
-    @JsonManagedReference
+    @JsonBackReference
     private CategoryDTO category;
 
 }

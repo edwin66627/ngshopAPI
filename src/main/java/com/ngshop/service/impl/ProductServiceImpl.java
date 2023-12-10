@@ -46,6 +46,30 @@ public class ProductServiceImpl implements ProductService {
         return convertToProductDTO(productSaved);
     }
 
+    @Override
+    public void updateProduct(ProductDTO productDTO, Long productId) {
+        Product product = productRepository.findById(productId).orElseThrow(
+                () -> new NoSuchElementException(String.format(ExceptionMessage.NO_SUCH_ELEMENT, "Product", productId)));
+
+        product.setName(productDTO.getName());
+        product.setDescription(productDTO.getDescription());
+        product.setBrand(productDTO.getBrand());
+        product.setImage(productDTO.getImage());
+        product.setPrice(productDTO.getPrice());
+        product.setCountInStock(productDTO.getCountInStock());
+        product.setFeatured(productDTO.isFeatured());
+        product.setRichDescription(productDTO.getRichDescription());
+        product.getCategory().setId(productDTO.getCategory().getId());
+        productRepository.save(product);
+    }
+
+    @Override
+    public void deleteProduct(Long productId) {
+        Product product = productRepository.findById(productId).orElseThrow(
+                () -> new NoSuchElementException(String.format(ExceptionMessage.NO_SUCH_ELEMENT, "Product", productId)));
+        productRepository.deleteById(productId);
+    }
+
     private ProductDTO convertToProductDTO(Product product){
         return modelMapper.map(product, ProductDTO.class);
     }
