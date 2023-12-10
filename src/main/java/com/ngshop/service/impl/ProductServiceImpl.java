@@ -33,10 +33,41 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public ProductDTO getProduct(Long productId) {
+        Product product = productRepository.findById(productId).orElseThrow(
+                () -> new NoSuchElementException(String.format(ExceptionMessage.NO_SUCH_ELEMENT, "Product", productId)));
+        return convertToProductDTO(product);
+    }
+
+    @Override
     public ProductDTO createProduct(ProductDTO productDTO) {
         Product product = convertToProduct(productDTO);
         Product productSaved = productRepository.save(product);
         return convertToProductDTO(productSaved);
+    }
+
+    @Override
+    public void updateProduct(ProductDTO productDTO, Long productId) {
+        Product product = productRepository.findById(productId).orElseThrow(
+                () -> new NoSuchElementException(String.format(ExceptionMessage.NO_SUCH_ELEMENT, "Product", productId)));
+
+        product.setName(productDTO.getName());
+        product.setDescription(productDTO.getDescription());
+        product.setBrand(productDTO.getBrand());
+        product.setImage(productDTO.getImage());
+        product.setPrice(productDTO.getPrice());
+        product.setCountInStock(productDTO.getCountInStock());
+        product.setFeatured(productDTO.isFeatured());
+        product.setRichDescription(productDTO.getRichDescription());
+        product.getCategory().setId(productDTO.getCategory().getId());
+        productRepository.save(product);
+    }
+
+    @Override
+    public void deleteProduct(Long productId) {
+        Product product = productRepository.findById(productId).orElseThrow(
+                () -> new NoSuchElementException(String.format(ExceptionMessage.NO_SUCH_ELEMENT, "Product", productId)));
+        productRepository.deleteById(productId);
     }
 
     private ProductDTO convertToProductDTO(Product product){
