@@ -36,5 +36,5 @@ public class ProductDTO {
     private Long categoryId;
     @JsonManagedReference
     private CategoryDTO category;
-    
+
 }

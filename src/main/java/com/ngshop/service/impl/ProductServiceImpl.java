@@ -33,6 +33,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public ProductDTO getProduct(Long productId) {
+        Product product = productRepository.findById(productId).orElseThrow(
+                () -> new NoSuchElementException(String.format(ExceptionMessage.NO_SUCH_ELEMENT, "Product", productId)));
+        return convertToProductDTO(product);
+    }
+
+    @Override
     public ProductDTO createProduct(ProductDTO productDTO) {
         Product product = convertToProduct(productDTO);
         Product productSaved = productRepository.save(product);

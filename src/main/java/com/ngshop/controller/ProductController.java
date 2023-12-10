@@ -28,6 +28,11 @@ public class ProductController {
         return new ResponseEntity<>(productService.listProducts(), OK);
     }
 
+    @GetMapping("/{productId}")
+    private ResponseEntity<ProductDTO> getProduct(@PathVariable Long productId){
+        return new ResponseEntity<>(productService.getProduct(productId), OK);
+    }
+
     @PostMapping("/new")
     private ResponseEntity<ProductDTO> createProduct(@Valid @RequestBody ProductDTO productDTO){
         return new ResponseEntity<>(productService.createProduct(productDTO), CREATED);
