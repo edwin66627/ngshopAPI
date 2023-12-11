@@ -1,7 +1,9 @@
 package com.ngshop.controller;
 
 import com.ngshop.constant.ResponseMessage;
+import com.ngshop.dto.CategoryDTO;
 import com.ngshop.dto.ProductDTO;
+import com.ngshop.dto.ProductStatisticsDTO;
 import com.ngshop.entity.HttpResponse;
 import com.ngshop.service.ProductService;
 import com.ngshop.utils.ResponseUtility;
@@ -51,6 +53,11 @@ public class ProductController {
     private ResponseEntity<HttpResponse> deleteProduct(@PathVariable Long productId){
         productService.deleteProduct(productId);
         return ResponseUtility.buildResponse(String.format(ResponseMessage.DELETE_SUCCESS, "Product"), OK);
+    }
+
+    @GetMapping("/count")
+    private ResponseEntity<ProductStatisticsDTO> getProductsCount(){
+        return new ResponseEntity<>(productService.getProductsCount(), OK);
     }
 
 }

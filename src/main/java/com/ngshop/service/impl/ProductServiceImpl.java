@@ -2,9 +2,8 @@ package com.ngshop.service.impl;
 
 import com.ngshop.constant.ExceptionMessage;
 import com.ngshop.dto.ProductDTO;
-import com.ngshop.entity.Category;
+import com.ngshop.dto.ProductStatisticsDTO;
 import com.ngshop.entity.Product;
-import com.ngshop.repository.CategoryRepository;
 import com.ngshop.repository.ProductRepository;
 import com.ngshop.service.ProductService;
 import org.modelmapper.ModelMapper;
@@ -68,6 +67,13 @@ public class ProductServiceImpl implements ProductService {
         Product product = productRepository.findById(productId).orElseThrow(
                 () -> new NoSuchElementException(String.format(ExceptionMessage.NO_SUCH_ELEMENT, "Product", productId)));
         productRepository.deleteById(productId);
+    }
+
+    @Override
+    public ProductStatisticsDTO getProductsCount() {
+        ProductStatisticsDTO productStatisticsDTO = new ProductStatisticsDTO();
+        productStatisticsDTO.setTotalCount(productRepository.count());
+        return productStatisticsDTO;
     }
 
     private ProductDTO convertToProductDTO(Product product){
