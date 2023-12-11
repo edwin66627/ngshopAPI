@@ -1,7 +1,9 @@
 package com.ngshop.dto;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.ngshop.entity.Category;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -17,6 +19,9 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class ProductDTO {
     private Long id;
     @NotEmpty(message = "Name is mandatory")
@@ -35,7 +40,7 @@ public class ProductDTO {
     private boolean isFeatured;
     private Date createdDate;
     private Long categoryId;
-    @JsonBackReference
+    //@JsonBackReference
     private CategoryDTO category;
 
 }
