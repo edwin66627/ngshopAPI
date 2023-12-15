@@ -2,9 +2,11 @@ package com.ngshop.service.impl;
 
 import com.ngshop.constant.ExceptionMessage;
 import com.ngshop.dto.ProductDTO;
+import com.ngshop.dto.ProductSearchCriteriaDTO;
 import com.ngshop.dto.ProductStatisticsDTO;
 import com.ngshop.entity.Product;
 import com.ngshop.repository.ProductRepository;
+import com.ngshop.repository.ProductRepositoryCustom;
 import com.ngshop.service.ProductService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,17 +19,19 @@ import java.util.stream.Collectors;
 @Service
 public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
+    private ProductRepositoryCustom productRepositoryCustom;
     private ModelMapper modelMapper;
 
     @Autowired
-    public ProductServiceImpl(ProductRepository productRepository, ModelMapper modelMapper) {
+    public ProductServiceImpl(ProductRepository productRepository, ProductRepositoryCustom productRepositoryCustom, ModelMapper modelMapper) {
         this.productRepository = productRepository;
+        this.productRepositoryCustom = productRepositoryCustom;
         this.modelMapper = modelMapper;
     }
 
     @Override
-    public List<ProductDTO> listProducts() {
-        List<Product> products = productRepository.findAll();
+    public List<ProductDTO> listProducts(ProductSearchCriteriaDTO productSearchCriteriaDTO) {
+        List<Product> products = productRepositoryCustom.searchProducts(productSearchCriteriaDTO);
         return products.stream().map(this::convertToProductDTO).collect(Collectors.toList());
     }
 
@@ -74,6 +78,11 @@ public class ProductServiceImpl implements ProductService {
         ProductStatisticsDTO productStatisticsDTO = new ProductStatisticsDTO();
         productStatisticsDTO.setTotalCount(productRepository.count());
         return productStatisticsDTO;
+    }
+
+    @Override
+    public List<ProductDTO> listFeaturedProducts() {
+        return null;
     }
 
     private ProductDTO convertToProductDTO(Product product){

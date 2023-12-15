@@ -17,16 +17,13 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
 public class CategoryDTO {
     private Long id;
     @NotEmpty(message = "Name is mandatory")
     private String name;
     private String color;
     private String icon;
-    //@JsonManagedReference
+    @JsonManagedReference
     private List<ProductDTO> products;
 
 }

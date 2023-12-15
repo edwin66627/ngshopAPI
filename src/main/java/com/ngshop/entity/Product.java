@@ -1,5 +1,6 @@
 package com.ngshop.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -38,6 +39,7 @@ public class Product {
     // Products is the owning side of the relationship and Category is the inverse since it includes 'mappedBy' attribute
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
+    @JsonBackReference
     private Category category;
 
 }

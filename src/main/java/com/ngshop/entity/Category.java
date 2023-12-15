@@ -1,6 +1,7 @@
 package com.ngshop.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,7 @@ public class Category {
     private String name;
     private String color;
     private String icon;
+    @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "category")
     private Set<Product> products;
 

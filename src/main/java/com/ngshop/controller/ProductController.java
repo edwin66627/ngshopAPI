@@ -3,6 +3,7 @@ package com.ngshop.controller;
 import com.ngshop.constant.ResponseMessage;
 import com.ngshop.dto.CategoryDTO;
 import com.ngshop.dto.ProductDTO;
+import com.ngshop.dto.ProductSearchCriteriaDTO;
 import com.ngshop.dto.ProductStatisticsDTO;
 import com.ngshop.entity.HttpResponse;
 import com.ngshop.service.ProductService;
@@ -29,8 +30,8 @@ public class ProductController {
     }
 
     @GetMapping("/list")
-    private ResponseEntity<List<ProductDTO>> listProducts(){
-        return new ResponseEntity<>(productService.listProducts(), OK);
+    private ResponseEntity<List<ProductDTO>> listProducts(@RequestBody ProductSearchCriteriaDTO productSearchCriteriaDTO){
+        return new ResponseEntity<>(productService.listProducts(productSearchCriteriaDTO), OK);
     }
 
     @GetMapping("/{productId}")
@@ -58,6 +59,11 @@ public class ProductController {
     @GetMapping("/count")
     private ResponseEntity<ProductStatisticsDTO> getProductsCount(){
         return new ResponseEntity<>(productService.getProductsCount(), OK);
+    }
+
+    @GetMapping("/featured")
+    private ResponseEntity<List<ProductStatisticsDTO>> getFeaturedProducts(){
+        return null;//new ResponseEntity<>(productService.getProductsCount(), OK);
     }
 
 }
