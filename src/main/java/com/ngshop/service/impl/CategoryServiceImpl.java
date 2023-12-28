@@ -3,9 +3,9 @@ package com.ngshop.service.impl;
 import com.ngshop.constant.ExceptionMessage;
 import com.ngshop.dto.CategoryDTO;
 import com.ngshop.entity.Category;
+import com.ngshop.mapper.CategoryMapper;
 import com.ngshop.repository.CategoryRepository;
 import com.ngshop.service.CategoryService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,18 +17,18 @@ import java.util.stream.Collectors;
 public class CategoryServiceImpl implements CategoryService {
 
     private CategoryRepository categoryRepository;
-    private ModelMapper modelMapper;
+    private CategoryMapper categoryMapper;
 
     @Autowired
-    public CategoryServiceImpl(CategoryRepository categoryRepository, ModelMapper modelMapper) {
+    public CategoryServiceImpl(CategoryRepository categoryRepository, CategoryMapper categoryMapper) {
         this.categoryRepository = categoryRepository;
-        this.modelMapper = modelMapper;
+        this.categoryMapper = categoryMapper;
     }
 
     @Override
     public List<CategoryDTO> listCategories() {
         List<Category> categories = categoryRepository.findAll();
-        return categories.stream().map(this::convertToCategoryDTO).collect(Collectors.toList());
+        return categories.stream().map(categoryMapper::getCategoryDto).collect(Collectors.toList());
     }
 
     @Override
@@ -36,15 +36,14 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = categoryRepository.findById(categoryId).orElseThrow(
                 () -> new NoSuchElementException(String.format(ExceptionMessage.NO_SUCH_ELEMENT, "Category", categoryId)));
 
-        CategoryDTO categoryDTO = convertToCategoryDTO(category);
-        return categoryDTO;
+        return categoryMapper.getCategoryDto(category);
     }
 
     @Override
     public CategoryDTO createCategory(CategoryDTO categoryDTO) {
-        Category category = convertToCategory(categoryDTO);
+        Category category = categoryMapper.getCategory(categoryDTO);
         Category categorySaved = categoryRepository.save(category);
-        return convertToCategoryDTO(categorySaved);
+        return categoryMapper.getCategoryDto(categorySaved);
     }
 
     @Override
@@ -64,14 +63,6 @@ public class CategoryServiceImpl implements CategoryService {
                 () -> new NoSuchElementException(String.format(ExceptionMessage.NO_SUCH_ELEMENT, "Category", categoryId)));
 
         categoryRepository.deleteById(categoryId);
-    }
-
-    private CategoryDTO convertToCategoryDTO(Category category){
-        return modelMapper.map(category,CategoryDTO.class);
-    }
-
-    private Category convertToCategory(CategoryDTO categoryDTO){
-        return modelMapper.map(categoryDTO, Category.class);
     }
 
 }

@@ -26,6 +26,7 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
         Root<Product> root = criteriaQuery.from(Product.class);
         List<Predicate> predicates = new ArrayList<>();
 
+        // If true, then return only featured products. If false, then return featured and not featured products
         if(productSearchCriteriaDTO.isFeatured()){
             predicates.add(criteriaBuilder.isTrue(root.get("isFeatured").as(Boolean.class)));
         }

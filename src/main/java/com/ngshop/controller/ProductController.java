@@ -1,7 +1,6 @@
 package com.ngshop.controller;
 
 import com.ngshop.constant.ResponseMessage;
-import com.ngshop.dto.CategoryDTO;
 import com.ngshop.dto.ProductDTO;
 import com.ngshop.dto.ProductSearchCriteriaDTO;
 import com.ngshop.dto.ProductStatisticsDTO;
@@ -37,6 +36,11 @@ public class ProductController {
     @GetMapping("/{productId}")
     private ResponseEntity<ProductDTO> getProduct(@PathVariable Long productId){
         return new ResponseEntity<>(productService.getProduct(productId), OK);
+    }
+
+    @GetMapping("/{productId}/category")
+    private ResponseEntity<ProductDTO> getProductWithCategory(@PathVariable Long productId){
+        return new ResponseEntity<>(productService.getProductWithCategory(productId), OK);
     }
 
     @PostMapping("/new")

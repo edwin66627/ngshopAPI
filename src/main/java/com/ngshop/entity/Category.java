@@ -23,7 +23,6 @@ public class Category {
     private String name;
     private String color;
     private String icon;
-    @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "category")
     private Set<Product> products;
 
