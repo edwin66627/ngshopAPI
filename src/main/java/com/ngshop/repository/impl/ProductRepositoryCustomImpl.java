@@ -30,6 +30,9 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
         if(productSearchCriteriaDTO.isFeatured()){
             predicates.add(criteriaBuilder.isTrue(root.get("isFeatured").as(Boolean.class)));
         }
+        if(!productSearchCriteriaDTO.getCategories().isEmpty()){
+            predicates.add(criteriaBuilder.isTrue(root.get("category").get("id").in(productSearchCriteriaDTO.getCategories())));
+        }
 
         criteriaQuery.where((predicates.toArray(new Predicate[0])));
         return entityManager.createQuery(criteriaQuery).getResultList();
