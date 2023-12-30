@@ -1,5 +1,6 @@
 package com.ngshop.entity;
 
+import com.ngshop.entity.security.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
