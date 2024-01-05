@@ -11,9 +11,10 @@ import org.springframework.beans.factory.annotation.Value;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.Map;
 import java.util.function.Function;
 
-import static com.ngshop.constant.SecurityConstant.EXPIRATION_TIME;
+import static com.ngshop.constant.SecurityConstant.*;
 
 @Component
 public class JWTTokenProvider {
@@ -21,13 +22,23 @@ public class JWTTokenProvider {
     @Value("${jwt.secret}")
     private String secret;
 
-    public String generateJwtToken(UserDetails userDetails){
+    public String generateToken(UserDetails userDetails){
         return Jwts.builder()
             .setSubject(userDetails.getUsername())
             .setIssuedAt(new Date(System.currentTimeMillis()))
-            .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+            .setExpiration(new Date(System.currentTimeMillis() + TOKEN_EXPIRATION_TIME))
             .signWith(getSigningKey(), SignatureAlgorithm.HS256)
             .compact();
+    }
+
+    public String generateRefreshToken(Map<String,Object> extraClaims, UserDetails userDetails){
+        return Jwts.builder()
+                .setClaims(extraClaims)
+                .setSubject(userDetails.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + REFRESH_TOKEN_EXPIRATION_TIME))
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .compact();
     }
 
     public String extractUsername(String token){
@@ -50,7 +61,7 @@ public class JWTTokenProvider {
 
 
     private Claims extractAllClaims(String token) {
-        return Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJwt(token).getBody();
+        return Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token).getBody();
     }
 
     private Key getSigningKey(){

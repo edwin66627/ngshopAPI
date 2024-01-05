@@ -36,6 +36,7 @@ public class User implements UserDetails, CredentialsContainer {
     @JsonIgnore
     @Column(name = "password", nullable = false, length = 1000)
     private String password;
+    @Builder.Default
     @Column(name = "email_verified", nullable = false)
     private Boolean emailVerified = false;
     @Column(name = "is_admin")
