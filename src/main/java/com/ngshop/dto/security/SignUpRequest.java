@@ -1,6 +1,5 @@
 package com.ngshop.dto.security;
 
-import com.ngshop.entity.security.Role;
 import lombok.Data;
 
 import java.util.Set;
@@ -12,5 +11,6 @@ public class SignUpRequest {
     private String username;
     private String email;
     private String password;
-    private Set<Role> roles;
+    private Set<AddressDTO> addresses;
+    private Set<RoleDTO> roles;
 }

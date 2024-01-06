@@ -5,6 +5,7 @@ import com.ngshop.dto.security.AuthenticationResponse;
 import com.ngshop.dto.security.RefreshTokenRequest;
 import com.ngshop.dto.security.SignUpRequest;
 import com.ngshop.dto.security.SignInRequest;
+import com.ngshop.entity.Address;
 import com.ngshop.entity.security.User;
 import com.ngshop.mapper.UserMapper;
 import com.ngshop.repository.UserRepository;
@@ -36,6 +37,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     public User signUp(SignUpRequest signUpRequest){
         User user = this.userMapper.getUser(signUpRequest);
+        for(Address address: user.getAddresses()){
+            address.setUser(user);
+        }
+
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
         return userRepository.save(user);
     }
