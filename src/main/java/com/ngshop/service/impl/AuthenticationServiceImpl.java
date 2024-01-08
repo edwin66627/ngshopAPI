@@ -49,7 +49,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public AuthenticationResponse signin(SignInRequest signinRequest) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signinRequest.getUsername(),
                 signinRequest.getPassword()));
-        var user = userRepository.findByUsername(signinRequest.getUsername()).orElseThrow(
+        User user = userRepository.findByUsername(signinRequest.getUsername()).orElseThrow(
                 () -> new IllegalArgumentException(ExceptionMessage.INVALID_CREDENTIALS));
 
         var jwt = tokenProvider.generateToken(user);

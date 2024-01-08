@@ -25,6 +25,7 @@ public class JWTTokenProvider {
     public String generateToken(UserDetails userDetails){
         return Jwts.builder()
             .setSubject(userDetails.getUsername())
+                .claim("role_authorities", userDetails.getAuthorities())
             .setIssuedAt(new Date(System.currentTimeMillis()))
             .setExpiration(new Date(System.currentTimeMillis() + TOKEN_EXPIRATION_TIME))
             .signWith(getSigningKey(), SignatureAlgorithm.HS256)
