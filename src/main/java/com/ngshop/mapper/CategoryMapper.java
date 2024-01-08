@@ -1,9 +1,7 @@
 package com.ngshop.mapper;
 
 import com.ngshop.dto.CategoryDTO;
-import com.ngshop.dto.ProductDTO;
 import com.ngshop.entity.Category;
-import com.ngshop.entity.Product;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
