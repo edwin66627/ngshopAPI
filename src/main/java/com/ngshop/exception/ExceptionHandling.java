@@ -3,6 +3,7 @@ package com.ngshop.exception;
 import com.ngshop.constant.ExceptionMessage;
 import com.ngshop.entity.HttpResponse;
 import com.ngshop.utils.ResponseUtility;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpHeaders;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -50,6 +52,11 @@ public class ExceptionHandling implements ErrorController {
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<HttpResponse> handleBadCredentialsException(Exception exception){
         return ResponseUtility.buildResponse(ExceptionMessage.INVALID_CREDENTIALS, BAD_REQUEST);
+    }
+
+    @ExceptionHandler({NoHandlerFoundException.class})
+    public ResponseEntity<HttpResponse> handleNoHandlerFoundException(Exception exception){
+        return ResponseUtility.buildResponse(exception.getMessage(), NOT_FOUND);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
