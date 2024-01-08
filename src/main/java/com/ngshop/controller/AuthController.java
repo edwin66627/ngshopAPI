@@ -1,9 +1,6 @@
 package com.ngshop.controller;
 
-import com.ngshop.dto.security.AuthenticationResponse;
-import com.ngshop.dto.security.RefreshTokenRequest;
-import com.ngshop.dto.security.SignUpRequest;
-import com.ngshop.dto.security.SignInRequest;
+import com.ngshop.dto.security.*;
 import com.ngshop.entity.security.User;
 import com.ngshop.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +25,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<User> signup(@RequestBody SignUpRequest signUpRequest) {
+    public ResponseEntity<UserDTO> signup(@RequestBody SignUpRequest signUpRequest) {
         return new ResponseEntity<>(authenticationService.signUp(signUpRequest), CREATED);
     }
 

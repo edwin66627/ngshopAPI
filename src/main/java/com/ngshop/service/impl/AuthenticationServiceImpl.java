@@ -1,10 +1,8 @@
 package com.ngshop.service.impl;
 
 import com.ngshop.constant.ExceptionMessage;
-import com.ngshop.dto.security.AuthenticationResponse;
-import com.ngshop.dto.security.RefreshTokenRequest;
-import com.ngshop.dto.security.SignUpRequest;
-import com.ngshop.dto.security.SignInRequest;
+import com.ngshop.dto.security.*;
+import com.ngshop.entity.Address;
 import com.ngshop.entity.security.User;
 import com.ngshop.mapper.UserMapper;
 import com.ngshop.repository.UserRepository;
@@ -14,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 
@@ -34,17 +33,23 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         this.userMapper = userMapper;
     }
 
-    public User signUp(SignUpRequest signUpRequest){
+    @Transactional
+    public UserDTO signUp(SignUpRequest signUpRequest){
         User user = this.userMapper.getUser(signUpRequest);
+        for(Address address: user.getAddresses()){
+            address.setUser(user);
+        }
+
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
-        return userRepository.save(user);
+        User userSaved = userRepository.save(user);
+        return this.userMapper.getUserDto(userSaved);
     }
 
     @Override
     public AuthenticationResponse signin(SignInRequest signinRequest) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signinRequest.getUsername(),
                 signinRequest.getPassword()));
-        var user = userRepository.findByUsername(signinRequest.getUsername()).orElseThrow(
+        User user = userRepository.findByUsername(signinRequest.getUsername()).orElseThrow(
                 () -> new IllegalArgumentException(ExceptionMessage.INVALID_CREDENTIALS));
 
         var jwt = tokenProvider.generateToken(user);

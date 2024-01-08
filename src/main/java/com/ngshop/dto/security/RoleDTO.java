@@ -1,16 +1,14 @@
 package com.ngshop.dto.security;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.ngshop.entity.security.Authority;
+import lombok.*;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+import java.util.Set;
+
+@Data
 public class RoleDTO {
     private Long id;
-
     private String name;
+    private Set<Authority> authorities;
+
 }
