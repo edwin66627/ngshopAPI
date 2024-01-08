@@ -8,6 +8,7 @@ import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -44,6 +45,11 @@ public class ExceptionHandling implements ErrorController {
     public ResponseEntity<HttpResponse> handleNotFoundException(Exception exception) {
         log.error(exception.getMessage());
         return ResponseUtility.buildResponse(exception.getMessage(),BAD_REQUEST);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<HttpResponse> handleBadCredentialsException(Exception exception){
+        return ResponseUtility.buildResponse(ExceptionMessage.INVALID_CREDENTIALS, BAD_REQUEST);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
