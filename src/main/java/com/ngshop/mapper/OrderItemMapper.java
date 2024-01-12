@@ -10,7 +10,7 @@ import org.mapstruct.Named;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface OrderItemMapper {
     OrderItem getOrderItem(OrderItemDTO orderItemDTO);
-    @Named("WithoutOrder")
+    @Named("WithoutRelatedData")
     @Mapping(target = "order", ignore = true)
     OrderItemDTO getOrderItemDtoWithoutOrder(OrderItem orderItem);
 

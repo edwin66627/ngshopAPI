@@ -34,4 +34,15 @@ public class OrderServiceImpl implements OrderService {
         return this.orderMapper.getOrderDtoWithNoUserNoAddress(order);
     }
 
+    @Override
+    public OrderDTO getOrder(Long orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(
+                () -> new NoSuchElementException(String.format(ExceptionMessage.NO_SUCH_ELEMENT, "Order", orderId)));
+
+        System.out.println("=========================================================================================");
+        System.out.println("BEFORE MAPPING ORDER TO DTO");
+        System.out.println("=========================================================================================");
+        return orderMapper.getOrderDto(order);
+    }
+
 }

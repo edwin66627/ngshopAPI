@@ -4,7 +4,6 @@ import com.ngshop.constant.ExceptionMessage;
 import com.ngshop.dto.ProductDTO;
 import com.ngshop.dto.ProductSearchCriteriaDTO;
 import com.ngshop.dto.ProductStatisticsDTO;
-import com.ngshop.entity.Category;
 import com.ngshop.entity.Product;
 import com.ngshop.mapper.ProductMapper;
 import com.ngshop.repository.ProductRepository;

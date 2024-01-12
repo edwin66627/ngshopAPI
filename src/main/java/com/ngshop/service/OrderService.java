@@ -4,4 +4,5 @@ import com.ngshop.dto.OrderDTO;
 
 public interface OrderService {
     OrderDTO createOrder(OrderDTO orderDTO);
+    OrderDTO getOrder(Long orderId);
 }

@@ -39,8 +39,6 @@ public class User implements UserDetails, CredentialsContainer {
     @Builder.Default
     @Column(name = "email_verified", nullable = false)
     private Boolean emailVerified = false;
-    @Column(name = "is_admin")
-    private Boolean isAdmin;
     @Builder.Default // So that Lombok doesn't set the variable to null. It sets the value we specify
     private Boolean accountNonExpired = true;
     @Builder.Default

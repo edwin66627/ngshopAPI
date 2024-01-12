@@ -16,6 +16,9 @@ public interface UserMapper {
     @Named("WithoutRoles")
     @Mapping(target = "roles", ignore = true)
     User getUserWithoutRoles(UserDTO userDTO);
-
+    @Named("WithoutRelatedData")
+    @Mapping(target = "addresses", ignore = true)
+    @Mapping(target = "roles", ignore = true)
+    UserDTO getUserDtoWithoutRelatedData(User user);
 }
 
