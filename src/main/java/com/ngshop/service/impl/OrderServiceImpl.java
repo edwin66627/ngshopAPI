@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -21,6 +23,12 @@ public class OrderServiceImpl implements OrderService {
     public OrderServiceImpl(OrderRepository orderRepository, OrderMapper orderMapper) {
         this.orderRepository = orderRepository;
         this.orderMapper = orderMapper;
+    }
+
+    @Override
+    public List<OrderDTO> listOrders() {
+        List<Order> orders = orderRepository.findAll();
+        return orders.stream().map(orderMapper::getOrderDto).collect(Collectors.toList());
     }
 
     @Override
@@ -39,9 +47,6 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository.findById(orderId).orElseThrow(
                 () -> new NoSuchElementException(String.format(ExceptionMessage.NO_SUCH_ELEMENT, "Order", orderId)));
 
-        System.out.println("=========================================================================================");
-        System.out.println("BEFORE MAPPING ORDER TO DTO");
-        System.out.println("=========================================================================================");
         return orderMapper.getOrderDto(order);
     }
 

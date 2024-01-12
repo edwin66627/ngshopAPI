@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
@@ -18,6 +20,12 @@ public class OrderController {
     public OrderController(OrderService orderService) {
         this.orderService = orderService;
     }
+
+    @GetMapping("/list")
+    private ResponseEntity<List<OrderDTO>> listOrders(){
+        return new ResponseEntity<>(orderService.listOrders(), OK);
+    }
+
     @PostMapping("/new")
     private ResponseEntity<OrderDTO> createOrder(@Valid @RequestBody OrderDTO orderDTO){
         return new ResponseEntity<>(orderService.createOrder(orderDTO), CREATED);
@@ -25,7 +33,6 @@ public class OrderController {
 
     @GetMapping("/{orderId}")
     private ResponseEntity<OrderDTO> getOrder(@PathVariable Long orderId){
-        orderService.getOrder(orderId);
         return new ResponseEntity<>(orderService.getOrder(orderId), OK);
     }
 
