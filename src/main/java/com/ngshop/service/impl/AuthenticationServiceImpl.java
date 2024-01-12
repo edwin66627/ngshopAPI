@@ -35,7 +35,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Transactional
     public UserDTO signUp(SignUpRequest signUpRequest){
-        User user = this.userMapper.getUser(signUpRequest);
+        User user = this.userMapper.getUserToSignUp(signUpRequest);
         for(Address address: user.getAddresses()){
             address.setUser(user);
         }

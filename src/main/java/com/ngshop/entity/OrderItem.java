@@ -18,6 +18,8 @@ public class OrderItem {
     private int quantity;
     @Column(name="product_id")
     private Long productId;
+    @Column(name="unit_price")
+    private float unitPrice;
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;

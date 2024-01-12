@@ -22,8 +22,6 @@ public class Order {
     private Long id;
     @Column(name = "status", nullable = false)
     private String status;
-    @Column(name = "shipping_address", nullable = false)
-    private  Long shippingAddressId;
     @Column(name = "total_price", nullable = false)
     private float totalPrice;
     @Column(name = "order_date", nullable = false)

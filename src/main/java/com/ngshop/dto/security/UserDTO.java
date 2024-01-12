@@ -2,6 +2,7 @@ package com.ngshop.dto.security;
 
 import lombok.Data;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -19,6 +20,6 @@ public class UserDTO {
     private Boolean credentialsNonExpired;
     private Boolean enabled;
     private Set<AddressDTO> addresses;
-    private Set<RoleDTO> roles;
+    private Set<RoleDTO> roles  = new HashSet<>();;
 
 }
