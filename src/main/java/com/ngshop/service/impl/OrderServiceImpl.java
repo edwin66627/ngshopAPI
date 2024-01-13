@@ -2,6 +2,7 @@ package com.ngshop.service.impl;
 
 import com.ngshop.constant.ExceptionMessage;
 import com.ngshop.dto.OrderDTO;
+import com.ngshop.dto.OrderStatusUpdateRequest;
 import com.ngshop.entity.Order;
 import com.ngshop.entity.OrderItem;
 import com.ngshop.mapper.OrderMapper;
@@ -32,6 +33,14 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public void updateOrderStatus(OrderStatusUpdateRequest orderStatusUpdateRequest, Long orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(
+                () -> new NoSuchElementException(String.format(ExceptionMessage.NO_SUCH_ELEMENT, "Order", orderId)));
+        order.setStatus(orderStatusUpdateRequest.getStatus());
+        orderRepository.save(order);
+    }
+
+    @Override
     @Transactional
     public OrderDTO createOrder(OrderDTO orderDTO) {
         Order order = orderMapper.getOrder(orderDTO);
@@ -48,6 +57,14 @@ public class OrderServiceImpl implements OrderService {
                 () -> new NoSuchElementException(String.format(ExceptionMessage.NO_SUCH_ELEMENT, "Order", orderId)));
 
         return orderMapper.getOrderDto(order);
+    }
+
+    @Override
+    public void deleteOrder(Long orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(
+                () -> new NoSuchElementException(String.format(ExceptionMessage.NO_SUCH_ELEMENT, "Order", orderId)));
+
+        orderRepository.deleteById(orderId);
     }
 
 }

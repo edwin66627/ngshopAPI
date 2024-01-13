@@ -1,7 +1,11 @@
 package com.ngshop.controller;
 
+import com.ngshop.constant.ResponseMessage;
 import com.ngshop.dto.OrderDTO;
+import com.ngshop.dto.OrderStatusUpdateRequest;
+import com.ngshop.entity.HttpResponse;
 import com.ngshop.service.OrderService;
+import com.ngshop.utils.ResponseUtility;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +38,19 @@ public class OrderController {
     @GetMapping("/{orderId}")
     private ResponseEntity<OrderDTO> getOrder(@PathVariable Long orderId){
         return new ResponseEntity<>(orderService.getOrder(orderId), OK);
+    }
+
+    @PutMapping("/{orderId}")
+    private ResponseEntity<HttpResponse> updateOrderStatus(@Valid @RequestBody OrderStatusUpdateRequest orderStatusUpdateRequest,
+                                                           @PathVariable Long orderId){
+        orderService.updateOrderStatus(orderStatusUpdateRequest, orderId);
+        return ResponseUtility.buildResponse(String.format(ResponseMessage.UPDATE_SUCCESS, "Order status"), OK);
+    }
+
+    @DeleteMapping("/{orderId}")
+    private ResponseEntity<HttpResponse> deleteProduct(@PathVariable Long orderId){
+        orderService.deleteOrder(orderId);
+        return ResponseUtility.buildResponse(String.format(ResponseMessage.DELETE_SUCCESS, "Order"), OK);
     }
 
 }
