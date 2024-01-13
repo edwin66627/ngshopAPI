@@ -4,7 +4,6 @@ import com.ngshop.constant.ExceptionMessage;
 import com.ngshop.dto.ProductDTO;
 import com.ngshop.dto.ProductSearchCriteriaDTO;
 import com.ngshop.dto.ProductStatisticsDTO;
-import com.ngshop.entity.Category;
 import com.ngshop.entity.Product;
 import com.ngshop.mapper.ProductMapper;
 import com.ngshop.repository.ProductRepository;
@@ -41,7 +40,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDTO getProduct(Long productId) {
         Product product = productRepository.findById(productId).orElseThrow(
-                () -> new NoSuchElementException(String.format(ExceptionMessage.NO_SUCH_ELEMENT, "Product", productId)));
+                () -> new NoSuchElementException(String.format(ExceptionMessage.NO_SUCH_ELEMENT, "Product", "id",productId)));
         return this.productMapper.getProductDto(product);
     }
 
@@ -62,7 +61,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void updateProduct(ProductDTO productDTO, Long productId) {
         Product product = productRepository.findById(productId).orElseThrow(
-                () -> new NoSuchElementException(String.format(ExceptionMessage.NO_SUCH_ELEMENT, "Product", productId)));
+                () -> new NoSuchElementException(String.format(ExceptionMessage.NO_SUCH_ELEMENT, "Product", "id",productId)));
 
         product.setName(productDTO.getName());
         product.setDescription(productDTO.getDescription());
@@ -79,7 +78,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void deleteProduct(Long productId) {
         Product product = productRepository.findById(productId).orElseThrow(
-                () -> new NoSuchElementException(String.format(ExceptionMessage.NO_SUCH_ELEMENT, "Product", productId)));
+                () -> new NoSuchElementException(String.format(ExceptionMessage.NO_SUCH_ELEMENT, "Product", "id",productId)));
         productRepository.deleteById(productId);
     }
 

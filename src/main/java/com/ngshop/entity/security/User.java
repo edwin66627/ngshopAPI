@@ -39,8 +39,6 @@ public class User implements UserDetails, CredentialsContainer {
     @Builder.Default
     @Column(name = "email_verified", nullable = false)
     private Boolean emailVerified = false;
-    @Column(name = "is_admin")
-    private Boolean isAdmin;
     @Builder.Default // So that Lombok doesn't set the variable to null. It sets the value we specify
     private Boolean accountNonExpired = true;
     @Builder.Default
@@ -64,7 +62,7 @@ public class User implements UserDetails, CredentialsContainer {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Address> addresses = new HashSet<>();
     @Singular
-    @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JoinTable(name = "user_role",
             joinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "ID")},
             inverseJoinColumns = {@JoinColumn(name = "ROLE_ID", referencedColumnName = "ID")})
