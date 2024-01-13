@@ -35,7 +35,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void updateOrderStatus(OrderStatusUpdateRequest orderStatusUpdateRequest, Long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(
-                () -> new NoSuchElementException(String.format(ExceptionMessage.NO_SUCH_ELEMENT, "Order", orderId)));
+                () -> new NoSuchElementException(String.format(ExceptionMessage.NO_SUCH_ELEMENT, "Order", "id",orderId)));
         order.setStatus(orderStatusUpdateRequest.getStatus());
         orderRepository.save(order);
     }
@@ -54,15 +54,24 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDTO getOrder(Long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(
-                () -> new NoSuchElementException(String.format(ExceptionMessage.NO_SUCH_ELEMENT, "Order", orderId)));
+                () -> new NoSuchElementException(String.format(ExceptionMessage.NO_SUCH_ELEMENT, "Order","id", orderId)));
 
         return orderMapper.getOrderDto(order);
     }
 
     @Override
+    public List<OrderDTO> getUserOrders(Long userId) {
+        List<Order> orders = orderRepository.findByUserId(userId);
+        if (orders.isEmpty()){
+            throw new NoSuchElementException(String.format(ExceptionMessage.NO_SUCH_ELEMENT, "Orders", "user id",userId));
+        }
+        return orders.stream().map(orderMapper::getOrderDto).collect(Collectors.toList());
+    }
+
+    @Override
     public void deleteOrder(Long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(
-                () -> new NoSuchElementException(String.format(ExceptionMessage.NO_SUCH_ELEMENT, "Order", orderId)));
+                () -> new NoSuchElementException(String.format(ExceptionMessage.NO_SUCH_ELEMENT, "Order", "id",orderId)));
 
         orderRepository.deleteById(orderId);
     }

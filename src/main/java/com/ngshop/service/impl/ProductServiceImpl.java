@@ -40,7 +40,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDTO getProduct(Long productId) {
         Product product = productRepository.findById(productId).orElseThrow(
-                () -> new NoSuchElementException(String.format(ExceptionMessage.NO_SUCH_ELEMENT, "Product", productId)));
+                () -> new NoSuchElementException(String.format(ExceptionMessage.NO_SUCH_ELEMENT, "Product", "id",productId)));
         return this.productMapper.getProductDto(product);
     }
 
@@ -61,7 +61,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void updateProduct(ProductDTO productDTO, Long productId) {
         Product product = productRepository.findById(productId).orElseThrow(
-                () -> new NoSuchElementException(String.format(ExceptionMessage.NO_SUCH_ELEMENT, "Product", productId)));
+                () -> new NoSuchElementException(String.format(ExceptionMessage.NO_SUCH_ELEMENT, "Product", "id",productId)));
 
         product.setName(productDTO.getName());
         product.setDescription(productDTO.getDescription());
@@ -78,7 +78,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void deleteProduct(Long productId) {
         Product product = productRepository.findById(productId).orElseThrow(
-                () -> new NoSuchElementException(String.format(ExceptionMessage.NO_SUCH_ELEMENT, "Product", productId)));
+                () -> new NoSuchElementException(String.format(ExceptionMessage.NO_SUCH_ELEMENT, "Product", "id",productId)));
         productRepository.deleteById(productId);
     }
 

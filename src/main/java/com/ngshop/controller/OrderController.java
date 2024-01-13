@@ -40,6 +40,11 @@ public class OrderController {
         return new ResponseEntity<>(orderService.getOrder(orderId), OK);
     }
 
+    @GetMapping("/user/{userId}")
+    private ResponseEntity<List<OrderDTO>> getUserOrders(@PathVariable Long userId){
+        return new ResponseEntity<>(orderService.getUserOrders(userId), OK);
+    }
+
     @PutMapping("/{orderId}")
     private ResponseEntity<HttpResponse> updateOrderStatus(@Valid @RequestBody OrderStatusUpdateRequest orderStatusUpdateRequest,
                                                            @PathVariable Long orderId){
