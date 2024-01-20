@@ -9,9 +9,12 @@ import com.ngshop.mapper.ProductMapper;
 import com.ngshop.repository.ProductRepository;
 import com.ngshop.repository.ProductRepositoryCustom;
 import com.ngshop.service.ProductService;
+import com.ngshop.utils.FileStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -21,13 +24,15 @@ import java.util.stream.Collectors;
 public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
     private ProductRepositoryCustom productRepositoryCustom;
+    private final FileStorage fileStorage;
     private ProductMapper productMapper;
 
     @Autowired
     public ProductServiceImpl(ProductRepository productRepository, ProductRepositoryCustom productRepositoryCustom,
-                              ProductMapper productMapper) {
+                              FileStorage fileStorage, ProductMapper productMapper) {
         this.productRepository = productRepository;
         this.productRepositoryCustom = productRepositoryCustom;
+        this.fileStorage = fileStorage;
         this.productMapper = productMapper;
     }
 
@@ -52,10 +57,17 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDTO createProduct(ProductDTO productDTO) {
+    public ProductDTO createProduct(ProductDTO productDTO, MultipartFile image) {
         Product product = this.productMapper.getProduct(productDTO);
-        Product productSaved = productRepository.save(product);
-        return this.productMapper.getProductDto(productSaved);
+        String savedImagePath = null;
+        try {
+            savedImagePath = this.fileStorage.uploadFile(image);
+            product.setImage(savedImagePath);
+            Product productSaved = productRepository.save(product);
+            return this.productMapper.getProductDto(productSaved);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

@@ -7,10 +7,13 @@ import com.ngshop.dto.ProductStatisticsDTO;
 import com.ngshop.entity.HttpResponse;
 import com.ngshop.service.ProductService;
 import com.ngshop.utils.ResponseUtility;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -44,8 +47,11 @@ public class ProductController {
     }
 
     @PostMapping("/new")
-    private ResponseEntity<ProductDTO> createProduct(@Valid @RequestBody ProductDTO productDTO){
-        return new ResponseEntity<>(productService.createProduct(productDTO), CREATED);
+    private ResponseEntity<ProductDTO> createProduct(@RequestPart("product") ProductDTO productDTO,
+                                                     @RequestPart("image") MultipartFile image,
+                                                     HttpServletRequest request){
+        //String requestUrl = request.getRequestURL().toString();
+        return new ResponseEntity<>(productService.createProduct(productDTO, image), CREATED);
     }
 
     @PutMapping("/{productId}")
