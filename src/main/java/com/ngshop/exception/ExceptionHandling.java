@@ -2,6 +2,7 @@ package com.ngshop.exception;
 
 import com.ngshop.constant.ExceptionMessage;
 import com.ngshop.entity.HttpResponse;
+import com.ngshop.exception.domain.UnsupportedContentTypeException;
 import com.ngshop.utils.ResponseUtility;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.*;
@@ -45,6 +47,20 @@ public class ExceptionHandling implements ErrorController {
     @ExceptionHandler(NoSuchElementException.class)
     @ResponseStatus(value= BAD_REQUEST)
     public ResponseEntity<HttpResponse> handleNotFoundException(Exception exception) {
+        log.error(exception.getMessage());
+        return ResponseUtility.buildResponse(exception.getMessage(),BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    @ResponseStatus(value= BAD_REQUEST)
+    public ResponseEntity<HttpResponse> handleMaxUploadSizeExceededException(Exception exception) {
+        log.error(exception.getMessage());
+        return ResponseUtility.buildResponse(exception.getMessage(),BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UnsupportedContentTypeException.class)
+    @ResponseStatus(value= BAD_REQUEST)
+    public ResponseEntity<HttpResponse> handleUnsupportedContentTypeException(Exception exception) {
         log.error(exception.getMessage());
         return ResponseUtility.buildResponse(exception.getMessage(),BAD_REQUEST);
     }

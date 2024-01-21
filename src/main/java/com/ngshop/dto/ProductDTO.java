@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 import java.util.List;
@@ -32,6 +33,7 @@ public class ProductDTO {
     private int numReviews;
     @JsonProperty
     private boolean isFeatured;
+    private MultipartFile imageFile;
     private Date createdDate;
     private CategoryDTO category;
 
