@@ -6,5 +6,6 @@ public class ExceptionMessage {
     public static final String NOT_FOUND_MSG = "There is no mapping for this URL";
     public static final String NO_SUCH_ELEMENT = "%s with %s %s not found";
     public static final String INVALID_CREDENTIALS = "Invalid username or password";
+    public static final String UNSUPPORTED_IMAGE_FILE = "Invalid image file. Valid extensions are: png, jpg and jpeg";
 
 }

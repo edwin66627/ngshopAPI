@@ -3,6 +3,7 @@ package com.ngshop.service;
 import com.ngshop.dto.ProductDTO;
 import com.ngshop.dto.ProductSearchCriteriaDTO;
 import com.ngshop.dto.ProductStatisticsDTO;
+import com.ngshop.exception.domain.UnsupportedContentTypeException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;

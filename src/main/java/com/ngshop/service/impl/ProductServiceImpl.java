@@ -5,6 +5,7 @@ import com.ngshop.dto.ProductDTO;
 import com.ngshop.dto.ProductSearchCriteriaDTO;
 import com.ngshop.dto.ProductStatisticsDTO;
 import com.ngshop.entity.Product;
+import com.ngshop.exception.domain.UnsupportedContentTypeException;
 import com.ngshop.mapper.ProductMapper;
 import com.ngshop.repository.ProductRepository;
 import com.ngshop.repository.ProductRepositoryCustom;
@@ -67,6 +68,8 @@ public class ProductServiceImpl implements ProductService {
             return this.productMapper.getProductDto(productSaved);
         } catch (IOException e) {
             throw new RuntimeException(e);
+        } catch (IllegalArgumentException e) {
+            throw new UnsupportedContentTypeException(e.getMessage());
         }
     }
 
