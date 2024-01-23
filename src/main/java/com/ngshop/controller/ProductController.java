@@ -48,10 +48,10 @@ public class ProductController {
 
     @PostMapping("/new")
     private ResponseEntity<ProductDTO> createProduct(@RequestPart("product") ProductDTO productDTO,
-                                                     @RequestPart("image") MultipartFile image,
+                                                     @RequestPart("image") MultipartFile[] images,
                                                      HttpServletRequest request){
         //String requestUrl = request.getRequestURL().toString();
-        return new ResponseEntity<>(productService.createProduct(productDTO, image), CREATED);
+        return new ResponseEntity<>(productService.createProduct(productDTO, images), CREATED);
     }
 
     @PutMapping("/{productId}")
