@@ -58,11 +58,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDTO createProduct(ProductDTO productDTO, MultipartFile image) {
+    public ProductDTO createProduct(ProductDTO productDTO, MultipartFile[] images) {
         Product product = this.productMapper.getProduct(productDTO);
         String savedImagePath = null;
         try {
-            savedImagePath = this.fileStorage.uploadFile(image);
+            savedImagePath = this.fileStorage.uploadFile(images);
             product.setImage(savedImagePath);
             Product productSaved = productRepository.save(product);
             return this.productMapper.getProductDto(productSaved);
