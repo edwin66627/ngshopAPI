@@ -7,5 +7,6 @@ public class ExceptionMessage {
     public static final String NO_SUCH_ELEMENT = "%s with %s %s not found";
     public static final String INVALID_CREDENTIALS = "Invalid username or password";
     public static final String UNSUPPORTED_IMAGE_FILE = "Invalid image file. Valid extensions are: png, jpg and jpeg";
+    public static final String FILE_SIZE_NOT_ALLOWED = "Individual image file size can not be greater than 2MB";
 
 }

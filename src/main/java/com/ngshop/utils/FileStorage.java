@@ -1,6 +1,7 @@
 package com.ngshop.utils;
 
 import com.ngshop.constant.ExceptionMessage;
+import com.ngshop.exception.domain.FileSizeNotAllowedException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,6 +13,8 @@ import java.util.UUID;
 @Component
 public class FileStorage {
 
+    @Value("${maximum.file.size}")
+    long maxFileSize;
     private String imagesPath;
 
     public FileStorage() throws IOException {
@@ -19,8 +22,12 @@ public class FileStorage {
     }
 
     public String uploadFile(MultipartFile[] images) throws IOException, IllegalArgumentException {
+
         if(!isSupportedContentType(images)){
             throw new IllegalArgumentException(ExceptionMessage.UNSUPPORTED_IMAGE_FILE);
+        }
+        if(!isIndividualFileSizeAllowed(images)){
+            throw new FileSizeNotAllowedException(ExceptionMessage.FILE_SIZE_NOT_ALLOWED);
         }
 
         String imagesString = "";
@@ -47,6 +54,17 @@ public class FileStorage {
             }
         }
         return isSupported;
+    }
+
+    private boolean isIndividualFileSizeAllowed(MultipartFile[] images) throws IOException {
+        boolean isFileSizeAllowed = false;
+        for(MultipartFile file: images){
+            long fileSize = file.getSize() / (1024);
+            if(fileSize > maxFileSize){
+                return isFileSizeAllowed;
+            }
+        }
+        return !isFileSizeAllowed;
     }
 
 }

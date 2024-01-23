@@ -2,6 +2,7 @@ package com.ngshop.exception;
 
 import com.ngshop.constant.ExceptionMessage;
 import com.ngshop.entity.HttpResponse;
+import com.ngshop.exception.domain.FileSizeNotAllowedException;
 import com.ngshop.exception.domain.UnsupportedContentTypeException;
 import com.ngshop.utils.ResponseUtility;
 import jakarta.servlet.http.HttpServletRequest;
@@ -54,6 +55,13 @@ public class ExceptionHandling implements ErrorController {
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     @ResponseStatus(value= BAD_REQUEST)
     public ResponseEntity<HttpResponse> handleMaxUploadSizeExceededException(Exception exception) {
+        log.error(exception.getMessage());
+        return ResponseUtility.buildResponse(exception.getMessage(),BAD_REQUEST);
+    }
+
+    @ExceptionHandler(FileSizeNotAllowedException.class)
+    @ResponseStatus(value= BAD_REQUEST)
+    public ResponseEntity<HttpResponse> handleFileSizeNotAllowedException(Exception exception) {
         log.error(exception.getMessage());
         return ResponseUtility.buildResponse(exception.getMessage(),BAD_REQUEST);
     }
