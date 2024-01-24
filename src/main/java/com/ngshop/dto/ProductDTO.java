@@ -25,7 +25,6 @@ public class ProductDTO {
     private String richDescription;
     private String brand;
     private String image;
-    private List<String> images;
     @NotNull(message = "A price is mandatory to ")
     private float price;
     private int countInStock;
@@ -36,5 +35,6 @@ public class ProductDTO {
     private MultipartFile imageFile;
     private Date createdDate;
     private CategoryDTO category;
+    private List<String> imagesToDelete;
 
 }

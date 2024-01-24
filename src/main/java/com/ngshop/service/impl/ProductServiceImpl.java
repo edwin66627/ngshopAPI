@@ -13,9 +13,11 @@ import com.ngshop.service.ProductService;
 import com.ngshop.utils.FileStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.file.NoSuchFileException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -46,7 +48,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDTO getProduct(Long productId) {
         Product product = productRepository.findById(productId).orElseThrow(
-                () -> new NoSuchElementException(String.format(ExceptionMessage.NO_SUCH_ELEMENT, "Product", "id",productId)));
+                () -> new NoSuchElementException(String.format(ExceptionMessage.NO_SUCH_ELEMENT, "Product", "id", productId)));
         return this.productMapper.getProductDto(product);
     }
 
@@ -60,10 +62,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDTO createProduct(ProductDTO productDTO, MultipartFile[] images) {
         Product product = this.productMapper.getProduct(productDTO);
-        String savedImagePath = null;
+        String imagesString;
         try {
-            savedImagePath = this.fileStorage.uploadFile(images);
-            product.setImage(savedImagePath);
+            imagesString = this.fileStorage.uploadFile(images);
+            product.setImage(imagesString);
             Product productSaved = productRepository.save(product);
             return this.productMapper.getProductDto(productSaved);
         } catch (IOException e) {
@@ -74,26 +76,58 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void updateProduct(ProductDTO productDTO, Long productId) {
+    public void updateProduct(ProductDTO productDTO, @RequestPart("images") MultipartFile[] images, Long productId) {
         Product product = productRepository.findById(productId).orElseThrow(
-                () -> new NoSuchElementException(String.format(ExceptionMessage.NO_SUCH_ELEMENT, "Product", "id",productId)));
+                () -> new NoSuchElementException(String.format(ExceptionMessage.NO_SUCH_ELEMENT, "Product", "id", productId)));
+        try {
+            String imagesString = "";
+            if (images != null && images.length > 0) {
+                imagesString += this.fileStorage.uploadFile(images);
+            }
 
-        product.setName(productDTO.getName());
-        product.setDescription(productDTO.getDescription());
-        product.setBrand(productDTO.getBrand());
-        product.setImage(productDTO.getImage());
-        product.setPrice(productDTO.getPrice());
-        product.setCountInStock(productDTO.getCountInStock());
-        product.setFeatured(productDTO.isFeatured());
-        product.setRichDescription(productDTO.getRichDescription());
-        product.getCategory().setId(productDTO.getCategory().getId());
-        productRepository.save(product);
+            if (!productDTO.getImagesToDelete().isEmpty() && product.getImage() != null) {
+                String[] imagesBeforeUpdate = product.getImage().split(",");
+                for (String image : imagesBeforeUpdate) {
+                    if (!productDTO.getImagesToDelete().contains(image)) {
+                        imagesString += image + ",";
+                    }
+                }
+                imagesString = imagesString.substring(0, imagesString.length() - 1);
+                fileStorage.deleteFiles(productDTO.getImagesToDelete());
+            }
+
+            if (!imagesString.isEmpty()) {
+                product.setImage(imagesString);
+            }
+
+            product.setName(productDTO.getName());
+            product.setDescription(productDTO.getDescription());
+            product.setBrand(productDTO.getBrand());
+            product.setPrice(productDTO.getPrice());
+            product.setCountInStock(productDTO.getCountInStock());
+            product.setFeatured(productDTO.isFeatured());
+            product.setRichDescription(productDTO.getRichDescription());
+            product.getCategory().setId(productDTO.getCategory().getId());
+            productRepository.save(product);
+        } catch (IOException e) {
+            List<String> imagesToDelte = productDTO.getImagesToDelete();
+            String file = ((NoSuchFileException) e).getFile();
+            String message = e.getMessage();
+            for(String image: imagesToDelte){
+                if(file.contains(image)){
+                    message = String.format(ExceptionMessage.NO_SUCH_FILE, image);
+                }
+            }
+            throw new NoSuchElementException(message);
+        } catch (IllegalArgumentException e) {
+            throw new UnsupportedContentTypeException(e.getMessage());
+        }
     }
 
     @Override
     public void deleteProduct(Long productId) {
         Product product = productRepository.findById(productId).orElseThrow(
-                () -> new NoSuchElementException(String.format(ExceptionMessage.NO_SUCH_ELEMENT, "Product", "id",productId)));
+                () -> new NoSuchElementException(String.format(ExceptionMessage.NO_SUCH_ELEMENT, "Product", "id", productId)));
         productRepository.deleteById(productId);
     }
 
