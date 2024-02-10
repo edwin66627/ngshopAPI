@@ -29,7 +29,6 @@ public class Product {
     private String richDescription;
     private String brand;
     private String image;
-    private List<String> images;
     @Column(name = "price", nullable = false)
     private float price;
     private int countInStock;

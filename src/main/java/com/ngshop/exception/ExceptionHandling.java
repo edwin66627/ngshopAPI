@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
+import java.nio.file.NoSuchFileException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -48,6 +49,13 @@ public class ExceptionHandling implements ErrorController {
     @ExceptionHandler(NoSuchElementException.class)
     @ResponseStatus(value= BAD_REQUEST)
     public ResponseEntity<HttpResponse> handleNotFoundException(Exception exception) {
+        log.error(exception.getMessage());
+        return ResponseUtility.buildResponse(exception.getMessage(),BAD_REQUEST);
+    }
+
+    @ExceptionHandler(NoSuchFileException.class)
+    @ResponseStatus(value= BAD_REQUEST)
+    public ResponseEntity<HttpResponse> handleNoSuchFileException(Exception exception) {
         log.error(exception.getMessage());
         return ResponseUtility.buildResponse(exception.getMessage(),BAD_REQUEST);
     }

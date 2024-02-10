@@ -18,7 +18,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-@EnableWebSecurity
+//@EnableWebSecurity
 public class SecurityConfig {
 
     private JWTAuthenticationFilter jwtAuthenticationFilter;
@@ -34,7 +34,7 @@ public class SecurityConfig {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request ->
                     request.requestMatchers("/image/**").permitAll()
-                    .requestMatchers("/auth/*","/product/list").permitAll()
+                    .requestMatchers("/auth/*","/product/list", "/category/*").permitAll()
                     .anyRequest().authenticated()
                 )
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

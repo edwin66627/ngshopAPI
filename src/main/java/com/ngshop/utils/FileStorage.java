@@ -8,6 +8,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -40,6 +44,13 @@ public class FileStorage {
 
         imagesString = imagesString.substring(0, imagesString.length() -1);
         return imagesString;
+    }
+
+    public void deleteFiles(List<String> files) throws IOException {
+        for(String filename: files){
+            Path fileToDeletePath = Paths.get(imagesPath+"/"+filename);
+            Files.delete(fileToDeletePath);
+        }
     }
 
     private boolean isSupportedContentType(MultipartFile[] images) {

@@ -48,15 +48,15 @@ public class ProductController {
 
     @PostMapping("/new")
     private ResponseEntity<ProductDTO> createProduct(@RequestPart("product") ProductDTO productDTO,
-                                                     @RequestPart("image") MultipartFile[] images,
-                                                     HttpServletRequest request){
-        //String requestUrl = request.getRequestURL().toString();
+                                                     @RequestPart("images") MultipartFile[] images){
         return new ResponseEntity<>(productService.createProduct(productDTO, images), CREATED);
     }
 
     @PutMapping("/{productId}")
-    private ResponseEntity<HttpResponse> updateProduct(@Valid @RequestBody ProductDTO productDTO, @PathVariable Long productId){
-        productService.updateProduct(productDTO,productId);
+    private ResponseEntity<HttpResponse> updateProduct(@Valid @RequestPart("product") ProductDTO productDTO,
+                                                       @RequestPart(value = "images", required = false) MultipartFile[] images,
+                                                       @PathVariable Long productId){
+        productService.updateProduct(productDTO,images, productId);
         return ResponseUtility.buildResponse(String.format(ResponseMessage.UPDATE_SUCCESS, "Product"), OK);
     }
 
