@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.NoSuchFileException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -128,7 +129,14 @@ public class ProductServiceImpl implements ProductService {
     public void deleteProduct(Long productId) {
         Product product = productRepository.findById(productId).orElseThrow(
                 () -> new NoSuchElementException(String.format(ExceptionMessage.NO_SUCH_ELEMENT, "Product", "id", productId)));
-        productRepository.deleteById(productId);
+
+        String[] productImages = product.getImage().split(",");
+        try {
+            fileStorage.deleteFiles(Arrays.stream(productImages).toList());
+            productRepository.deleteById(productId);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
