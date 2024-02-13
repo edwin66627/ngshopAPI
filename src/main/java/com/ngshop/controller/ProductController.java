@@ -31,7 +31,7 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @GetMapping("/list")
+    @PostMapping("/list")
     private ResponseEntity<List<ProductDTO>> listProducts(@RequestBody ProductSearchCriteriaDTO productSearchCriteriaDTO){
         return new ResponseEntity<>(productService.listProducts(productSearchCriteriaDTO), OK);
     }
