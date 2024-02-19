@@ -36,7 +36,8 @@ public class FileStorage {
 
         String imagesString = "";
         for(MultipartFile file: images){
-            String filename = UUID.randomUUID().toString() + "_" +file.getOriginalFilename();
+            String originalFilename = file.getOriginalFilename().replaceAll(" ", "_").toLowerCase();
+            String filename = UUID.randomUUID().toString() + "_" +originalFilename;
             String filePath = this.imagesPath + "/" + filename;
             file.transferTo(new File(filePath));
             imagesString += filename +",";

@@ -18,10 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.NoSuchFileException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,7 +40,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductDTO> listProducts(ProductSearchCriteriaDTO productSearchCriteriaDTO) {
         List<Product> products = productRepositoryCustom.searchProducts(productSearchCriteriaDTO);
-        return products.stream().map(productMapper::getProductDto).collect(Collectors.toList());
+        return products.stream().map(productMapper::getProductDtoWithCategory).collect(Collectors.toList());
     }
 
     @Override
@@ -67,6 +64,7 @@ public class ProductServiceImpl implements ProductService {
         try {
             imagesString = this.fileStorage.uploadFile(images);
             product.setImage(imagesString);
+            product.setCreatedDate(new Date());
             Product productSaved = productRepository.save(product);
             return this.productMapper.getProductDto(productSaved);
         } catch (IOException e) {
