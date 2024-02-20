@@ -81,11 +81,13 @@ public class ProductServiceImpl implements ProductService {
         try {
             String imagesString = "";
             if (images != null && images.length > 0) {
+                imagesString += product.getImage() + ",";
                 imagesString += this.fileStorage.uploadFile(images);
             }
 
             if (!productDTO.getImagesToDelete().isEmpty() && product.getImage() != null) {
-                String[] imagesBeforeUpdate = product.getImage().split(",");
+                String[] imagesBeforeUpdate = imagesString.split(",");
+                if(!imagesString.isEmpty()) imagesString += ",";
                 for (String image : imagesBeforeUpdate) {
                     if (!productDTO.getImagesToDelete().contains(image)) {
                         imagesString += image + ",";
