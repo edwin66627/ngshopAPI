@@ -12,6 +12,7 @@ import com.ngshop.repository.ProductRepositoryCustom;
 import com.ngshop.service.ProductService;
 import com.ngshop.utils.FileStorage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,9 +39,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDTO> listProducts(ProductSearchCriteriaDTO productSearchCriteriaDTO) {
-        List<Product> products = productRepositoryCustom.searchProducts(productSearchCriteriaDTO);
-        return products.stream().map(productMapper::getProductDtoWithCategory).collect(Collectors.toList());
+    public Page<ProductDTO> listProducts(ProductSearchCriteriaDTO productSearchCriteriaDTO) {
+        Page<Product> products = productRepositoryCustom.searchProducts(productSearchCriteriaDTO);
+        return products.map(productMapper::getProductDtoWithCategory);
     }
 
     @Override

@@ -13,8 +13,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductSearchCriteriaDTO {
+    private int pageSize;
+    private int pageNumber;
     @JsonProperty
     private boolean isFeatured;
     private List<Long> categories;
+
 
 }

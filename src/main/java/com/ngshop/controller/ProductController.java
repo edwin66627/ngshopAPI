@@ -10,6 +10,7 @@ import com.ngshop.utils.ResponseUtility;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +33,7 @@ public class ProductController {
     }
 
     @PostMapping("/list")
-    private ResponseEntity<List<ProductDTO>> listProducts(@RequestBody ProductSearchCriteriaDTO productSearchCriteriaDTO){
+    private ResponseEntity<Page<ProductDTO>> listProducts(@RequestBody ProductSearchCriteriaDTO productSearchCriteriaDTO){
         return new ResponseEntity<>(productService.listProducts(productSearchCriteriaDTO), OK);
     }
 
