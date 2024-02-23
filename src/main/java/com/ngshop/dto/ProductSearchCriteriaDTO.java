@@ -15,6 +15,8 @@ import java.util.List;
 public class ProductSearchCriteriaDTO {
     private int pageSize;
     private int pageNumber;
+    private String sortColumn;
+    private String sortDirection;
     @JsonProperty
     private boolean isFeatured;
     private List<Long> categories;

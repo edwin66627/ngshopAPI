@@ -10,10 +10,7 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -26,6 +23,9 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
     private EntityManager entityManager;
     @Override
     public Page<Product> searchProducts(ProductSearchCriteriaDTO productSearchCriteriaDTO) {
+        //Sort sortOne = Sort.by(productSearchCriteriaDTO.getSortDirection(), productSearchCriteriaDTO.getColumn());
+        //Sort sort = Sort.by(productSearchCriteriaDTO.getSortDirection().equals("ASC") ? Sort.Direction.ASC : Sort.Direction.DESC,
+        //        productSearchCriteriaDTO.getColumn());
         Pageable pageable = PageRequest.of(productSearchCriteriaDTO.getPageNumber(), productSearchCriteriaDTO.getPageSize());
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 
@@ -48,7 +48,13 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
             countPredicates.add(criteriaBuilder.isTrue(countRoot.get("category").get("id").in(productSearchCriteriaDTO.getCategories())));
         }
         productsQuery.where((productsPredicates.toArray(new Predicate[0])));
-        productsQuery.where((countPredicates.toArray(new Predicate[0])));
+        countQuery.where((countPredicates.toArray(new Predicate[0])));
+
+        if(productSearchCriteriaDTO.getSortDirection().equals("ASC")){
+            productsQuery.orderBy(criteriaBuilder.asc(productsRoot.get(productSearchCriteriaDTO.getSortColumn())));
+        }else{
+            productsQuery.orderBy(criteriaBuilder.desc(productsRoot.get(productSearchCriteriaDTO.getSortColumn())));
+        }
 
         List<Product> products = paginateQuery(entityManager.createQuery(productsQuery), pageable).getResultList();
         long count = entityManager.createQuery(countQuery).getSingleResult();
