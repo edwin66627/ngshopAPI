@@ -28,6 +28,7 @@ public class Product {
     @Column(name = "rich_description", length = 5000)
     private String richDescription;
     private String brand;
+    @Column(length = 1000)
     private String image;
     @Column(name = "price", nullable = false)
     private float price;

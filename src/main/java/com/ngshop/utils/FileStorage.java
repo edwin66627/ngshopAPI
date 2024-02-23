@@ -35,14 +35,17 @@ public class FileStorage {
         }
 
         String imagesString = "";
-        for(MultipartFile file: images){
-            String filename = UUID.randomUUID().toString() + "_" +file.getOriginalFilename();
+
+        for(int i = 0; i < images.length; i++){
+            String originalFilename = images[i].getOriginalFilename().replaceAll(" ", "_").toLowerCase();
+            String filename = UUID.randomUUID().toString().substring(0, 5) + "_" +originalFilename;
             String filePath = this.imagesPath + "/" + filename;
-            file.transferTo(new File(filePath));
-            imagesString += filename +",";
+            images[i].transferTo(new File(filePath));
+            imagesString += filename;
+            if(i != images.length - 1)
+                imagesString += ",";
         }
 
-        imagesString = imagesString.substring(0, imagesString.length() -1);
         return imagesString;
     }
 

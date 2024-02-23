@@ -12,16 +12,14 @@ import com.ngshop.repository.ProductRepositoryCustom;
 import com.ngshop.service.ProductService;
 import com.ngshop.utils.FileStorage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.NoSuchFileException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,9 +39,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDTO> listProducts(ProductSearchCriteriaDTO productSearchCriteriaDTO) {
-        List<Product> products = productRepositoryCustom.searchProducts(productSearchCriteriaDTO);
-        return products.stream().map(productMapper::getProductDto).collect(Collectors.toList());
+    public Page<ProductDTO> listProducts(ProductSearchCriteriaDTO productSearchCriteriaDTO) {
+        Page<Product> products = productRepositoryCustom.searchProducts(productSearchCriteriaDTO);
+        return products.map(productMapper::getProductDtoWithCategory);
     }
 
     @Override
@@ -67,6 +65,7 @@ public class ProductServiceImpl implements ProductService {
         try {
             imagesString = this.fileStorage.uploadFile(images);
             product.setImage(imagesString);
+            product.setCreatedDate(new Date());
             Product productSaved = productRepository.save(product);
             return this.productMapper.getProductDto(productSaved);
         } catch (IOException e) {
@@ -83,11 +82,13 @@ public class ProductServiceImpl implements ProductService {
         try {
             String imagesString = "";
             if (images != null && images.length > 0) {
+                imagesString += product.getImage() + ",";
                 imagesString += this.fileStorage.uploadFile(images);
             }
 
             if (!productDTO.getImagesToDelete().isEmpty() && product.getImage() != null) {
-                String[] imagesBeforeUpdate = product.getImage().split(",");
+                String[] imagesBeforeUpdate = imagesString.split(",");
+                if(!imagesString.isEmpty()) imagesString += ",";
                 for (String image : imagesBeforeUpdate) {
                     if (!productDTO.getImagesToDelete().contains(image)) {
                         imagesString += image + ",";
