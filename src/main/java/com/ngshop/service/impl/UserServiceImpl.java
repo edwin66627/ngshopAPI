@@ -1,5 +1,6 @@
 package com.ngshop.service.impl;
 
+import com.ngshop.constant.ExceptionMessage;
 import com.ngshop.dto.PaginatedRequestDTO;
 import com.ngshop.dto.security.UserDTO;
 import com.ngshop.entity.security.User;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,6 +35,15 @@ public class UserServiceImpl implements UserService {
                 : Sort.by(request.getSortColumn()).descending();
         Pageable pageable = PageRequest.of(request.getPageNumber(), request.getPageSize(), sort);
         return userRepository.findAll(pageable).map(this.userMapper::getUserDto);
-
     }
+
+    @Override
+    public UserDTO getUser(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new NoSuchElementException(String.format(ExceptionMessage.NO_SUCH_ELEMENT, "User", "id", userId))
+        );
+        return userMapper.getUserDto(user);
+    }
+
+
 }
