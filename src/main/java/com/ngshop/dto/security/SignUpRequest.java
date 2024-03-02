@@ -9,6 +9,7 @@ public class SignUpRequest {
     private String firstName;
     private String lastName;
     private String username;
+    private String phone;
     private String email;
     private String password;
     private Set<AddressDTO> addresses;

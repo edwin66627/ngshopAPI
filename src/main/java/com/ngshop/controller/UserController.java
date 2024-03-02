@@ -28,7 +28,7 @@ public class UserController {
     private ResponseEntity<Page<UserDTO>> listUsers(@RequestBody PaginatedRequestDTO paginatedRequestDTO){
         return new ResponseEntity<>(userService.listUsers(paginatedRequestDTO), OK);
     }
-    
+
     @GetMapping("/{userId}")
     private ResponseEntity<UserDTO> getUser(@PathVariable Long userId){
         return new ResponseEntity<>(userService.getUser(userId), OK);

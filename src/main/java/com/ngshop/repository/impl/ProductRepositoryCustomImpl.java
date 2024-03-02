@@ -23,9 +23,6 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
     private EntityManager entityManager;
     @Override
     public Page<Product> searchProducts(ProductSearchCriteriaDTO productSearchCriteriaDTO) {
-        //Sort sortOne = Sort.by(productSearchCriteriaDTO.getSortDirection(), productSearchCriteriaDTO.getColumn());
-        //Sort sort = Sort.by(productSearchCriteriaDTO.getSortDirection().equals("ASC") ? Sort.Direction.ASC : Sort.Direction.DESC,
-        //        productSearchCriteriaDTO.getColumn());
         Pageable pageable = PageRequest.of(productSearchCriteriaDTO.getPageNumber(), productSearchCriteriaDTO.getPageSize());
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 

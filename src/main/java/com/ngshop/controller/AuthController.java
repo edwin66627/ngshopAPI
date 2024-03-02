@@ -1,7 +1,6 @@
 package com.ngshop.controller;
 
 import com.ngshop.dto.security.*;
-import com.ngshop.entity.security.User;
 import com.ngshop.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
