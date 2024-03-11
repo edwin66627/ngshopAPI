@@ -7,4 +7,5 @@ import org.springframework.data.domain.Page;
 public interface UserService {
     Page<UserDTO> listUsers(PaginatedRequestDTO request);
     UserDTO getUser(Long userId);
+    void updateUser(UserDTO userDTO, Long userId);
 }
