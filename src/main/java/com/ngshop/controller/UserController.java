@@ -43,4 +43,10 @@ public class UserController {
         userService.updateUser(userDTO, userId);
         return ResponseUtility.buildResponse(String.format(ResponseMessage.UPDATE_SUCCESS, "User"), OK);
     }
+
+    @DeleteMapping("/{userId}")
+    private ResponseEntity<HttpResponse> deleteProduct(@PathVariable Long userId){
+        userService.deleteUser(userId);
+        return ResponseUtility.buildResponse(String.format(ResponseMessage.DELETE_SUCCESS, "User"), OK);
+    }
 }
