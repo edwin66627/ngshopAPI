@@ -24,17 +24,17 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<UserDTO> signup(@RequestBody SignUpRequest signUpRequest) {
+    public ResponseEntity<UserDTO> signUp(@RequestBody SignUpRequest signUpRequest) {
         return new ResponseEntity<>(authenticationService.signUp(signUpRequest), CREATED);
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<AuthenticationResponse> signup(@RequestBody SignInRequest signInRequest) {
+    public ResponseEntity<AuthenticationResponse> signIn(@RequestBody SignInRequest signInRequest) {
         return new ResponseEntity<>(authenticationService.signin(signInRequest), OK);
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<AuthenticationResponse> signup(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+    public ResponseEntity<AuthenticationResponse> refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
         return new ResponseEntity<>(authenticationService.refreshToken(refreshTokenRequest), OK);
     }
 
