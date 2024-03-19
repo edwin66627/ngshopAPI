@@ -53,7 +53,7 @@ public class OrderController {
     }
 
     @DeleteMapping("/{orderId}")
-    private ResponseEntity<HttpResponse> deleteProduct(@PathVariable Long orderId){
+    private ResponseEntity<HttpResponse> deleteOrder(@PathVariable Long orderId){
         orderService.deleteOrder(orderId);
         return ResponseUtility.buildResponse(String.format(ResponseMessage.DELETE_SUCCESS, "Order"), OK);
     }
