@@ -14,10 +14,10 @@ public interface OrderMapper {
     Order getOrderWithoutUserRoles(OrderDTO orderDTO);
     @Mapping(target = "user", ignore = true)
     @Mapping(target = "address", ignore = true)
-    @Mapping(target = "orderItems", qualifiedByName = "WithoutRelatedData")
+    @Mapping(target = "orderItems", qualifiedByName = "WithoutOrder")
     OrderDTO getOrderDtoWithNoUserNoAddress(Order order);
 
     @Mapping(target = "user", qualifiedByName = "WithoutRelatedData")
-    @Mapping(target = "orderItems", qualifiedByName = "WithoutRelatedData")
+    @Mapping(target = "orderItems", qualifiedByName = "WithoutOrder")
     OrderDTO getOrderDto(Order order);
 }
