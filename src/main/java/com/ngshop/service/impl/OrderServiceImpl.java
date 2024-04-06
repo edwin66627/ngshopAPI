@@ -3,9 +3,11 @@ package com.ngshop.service.impl;
 import com.ngshop.constant.ExceptionMessage;
 import com.ngshop.dto.OrderDTO;
 import com.ngshop.dto.OrderStatusUpdateRequest;
+import com.ngshop.entity.Address;
 import com.ngshop.entity.Order;
 import com.ngshop.entity.OrderItem;
 import com.ngshop.mapper.OrderMapper;
+import com.ngshop.repository.AddressRepository;
 import com.ngshop.repository.OrderRepository;
 import com.ngshop.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +22,13 @@ import java.util.stream.Collectors;
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
+
+    private final AddressRepository addressRepository;
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository, OrderMapper orderMapper) {
+    public OrderServiceImpl(OrderRepository orderRepository, OrderMapper orderMapper, AddressRepository addressRepository) {
         this.orderRepository = orderRepository;
         this.orderMapper = orderMapper;
+        this.addressRepository = addressRepository;
     }
 
     @Override
@@ -44,9 +49,17 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public OrderDTO createOrder(OrderDTO orderDTO) {
         Order order = orderMapper.getOrder(orderDTO);
+        if(order.getAddress().getId() == null){
+            order.getAddress().setUser(order.getUser());
+            Address addressSaved = addressRepository.save(order.getAddress());
+            order.setAddress(addressSaved);
+        }
+        int orderTotal = 0;
         for(OrderItem orderItem: order.getOrderItems()){
+            orderTotal+= orderItem.getUnitPrice() * orderItem.getQuantity();
             orderItem.setOrder(order);
         }
+        order.setTotalPrice(orderTotal);
         order = orderRepository.save(order);
         return this.orderMapper.getOrderDtoWithNoUserNoAddress(order);
     }

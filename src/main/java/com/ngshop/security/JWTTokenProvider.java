@@ -1,5 +1,6 @@
 package com.ngshop.security;
 
+import com.ngshop.entity.security.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -25,6 +26,7 @@ public class JWTTokenProvider {
     public String generateToken(UserDetails userDetails){
         return Jwts.builder()
             .setSubject(userDetails.getUsername())
+                .claim("userId", ((User) userDetails).getId())
                 .claim("role_authorities", userDetails.getAuthorities())
             .setIssuedAt(new Date(System.currentTimeMillis()))
             .setExpiration(new Date(System.currentTimeMillis() + TOKEN_EXPIRATION_TIME))
