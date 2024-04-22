@@ -5,6 +5,7 @@ import com.ngshop.entity.HttpResponse;
 import com.ngshop.exception.domain.FileSizeNotAllowedException;
 import com.ngshop.exception.domain.UnsupportedContentTypeException;
 import com.ngshop.utils.ResponseUtility;
+import com.stripe.exception.StripeException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.servlet.error.ErrorController;
@@ -89,6 +90,13 @@ public class ExceptionHandling implements ErrorController {
     @ExceptionHandler({NoHandlerFoundException.class})
     public ResponseEntity<HttpResponse> handleNoHandlerFoundException(Exception exception){
         return ResponseUtility.buildResponse(exception.getMessage(), NOT_FOUND);
+    }
+
+    @ExceptionHandler(StripeException.class)
+    @ResponseStatus(value= BAD_REQUEST)
+    public ResponseEntity<HttpResponse> handleStripeException(Exception exception) {
+        log.error(exception.getMessage());
+        return ResponseUtility.buildResponse(exception.getMessage(),BAD_REQUEST);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
