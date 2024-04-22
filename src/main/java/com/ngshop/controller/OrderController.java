@@ -3,8 +3,10 @@ package com.ngshop.controller;
 import com.ngshop.constant.ResponseMessage;
 import com.ngshop.dto.OrderDTO;
 import com.ngshop.dto.OrderStatusUpdateRequest;
+import com.ngshop.dto.PaymentResponseDTO;
 import com.ngshop.entity.HttpResponse;
 import com.ngshop.service.OrderService;
+import com.ngshop.service.PaymentService;
 import com.ngshop.utils.ResponseUtility;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +22,11 @@ import static org.springframework.http.HttpStatus.OK;
 @RequestMapping("/order")
 public class OrderController {
     private final OrderService orderService;
+    private final PaymentService paymentService;
     @Autowired
-    public OrderController(OrderService orderService) {
+    public OrderController(OrderService orderService, PaymentService paymentService) {
         this.orderService = orderService;
+        this.paymentService = paymentService;
     }
 
     @GetMapping("/list")
@@ -56,6 +60,11 @@ public class OrderController {
     private ResponseEntity<HttpResponse> deleteOrder(@PathVariable Long orderId){
         orderService.deleteOrder(orderId);
         return ResponseUtility.buildResponse(String.format(ResponseMessage.DELETE_SUCCESS, "Order"), OK);
+    }
+
+    @PostMapping("/create-checkout-session")
+    private ResponseEntity<PaymentResponseDTO> createPaymentSession(@RequestBody OrderDTO order){
+        return new ResponseEntity<>(paymentService.createPaymentSession(order), OK);
     }
 
 }
