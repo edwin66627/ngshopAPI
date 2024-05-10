@@ -5,6 +5,9 @@ import com.ngshop.dto.PaginatedRequestDTO;
 import com.ngshop.dto.security.UserDTO;
 import com.ngshop.entity.HttpResponse;
 import com.ngshop.entity.security.User;
+import com.ngshop.security.permissions.UserDeletePermission;
+import com.ngshop.security.permissions.UserReadPermission;
+import com.ngshop.security.permissions.UserUpdatePermission;
 import com.ngshop.service.UserService;
 import com.ngshop.utils.ResponseUtility;
 import jakarta.validation.Valid;
@@ -28,22 +31,26 @@ public class UserController {
         this.userService = userService;
     }
 
+    @UserReadPermission
     @PostMapping("/list")
     private ResponseEntity<Page<UserDTO>> listUsers(@RequestBody PaginatedRequestDTO paginatedRequestDTO){
         return new ResponseEntity<>(userService.listUsers(paginatedRequestDTO), OK);
     }
 
+    @UserReadPermission
     @GetMapping("/{userId}")
     private ResponseEntity<UserDTO> getUser(@PathVariable Long userId){
         return new ResponseEntity<>(userService.getUser(userId), OK);
     }
 
+    @UserUpdatePermission
     @PutMapping("/{userId}")
     private ResponseEntity<HttpResponse> updateUser(@Valid @RequestBody UserDTO userDTO, @PathVariable Long userId){
         userService.updateUser(userDTO, userId);
         return ResponseUtility.buildResponse(String.format(ResponseMessage.UPDATE_SUCCESS, "User"), OK);
     }
 
+    @UserDeletePermission
     @DeleteMapping("/{userId}")
     private ResponseEntity<HttpResponse> deleteProduct(@PathVariable Long userId){
         userService.deleteUser(userId);

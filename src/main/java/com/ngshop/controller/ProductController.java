@@ -5,6 +5,10 @@ import com.ngshop.dto.ProductDTO;
 import com.ngshop.dto.ProductSearchCriteriaDTO;
 import com.ngshop.dto.ProductStatisticsDTO;
 import com.ngshop.entity.HttpResponse;
+import com.ngshop.security.permissions.ProductCreatePermission;
+import com.ngshop.security.permissions.ProductDeletePermission;
+import com.ngshop.security.permissions.ProductReadPermission;
+import com.ngshop.security.permissions.ProductUpdatePermission;
 import com.ngshop.service.ProductService;
 import com.ngshop.utils.ResponseUtility;
 import jakarta.validation.Valid;
@@ -30,27 +34,32 @@ public class ProductController {
         this.productService = productService;
     }
 
+    @ProductReadPermission
     @PostMapping("/list")
     private ResponseEntity<Page<ProductDTO>> listProducts(@RequestBody ProductSearchCriteriaDTO productSearchCriteriaDTO){
         return new ResponseEntity<>(productService.listProducts(productSearchCriteriaDTO), OK);
     }
 
+    @ProductReadPermission
     @GetMapping("/{productId}")
     private ResponseEntity<ProductDTO> getProduct(@PathVariable Long productId){
         return new ResponseEntity<>(productService.getProduct(productId), OK);
     }
 
+    @ProductReadPermission
     @GetMapping("/{productId}/category")
     private ResponseEntity<ProductDTO> getProductWithCategory(@PathVariable Long productId){
         return new ResponseEntity<>(productService.getProductWithCategory(productId), OK);
     }
 
+    @ProductCreatePermission
     @PostMapping("/new")
     private ResponseEntity<ProductDTO> createProduct(@RequestPart("product") ProductDTO productDTO,
                                                      @RequestPart("images") MultipartFile[] images){
         return new ResponseEntity<>(productService.createProduct(productDTO, images), CREATED);
     }
 
+    @ProductUpdatePermission
     @PutMapping("/{productId}")
     private ResponseEntity<HttpResponse> updateProduct(@Valid @RequestPart("product") ProductDTO productDTO,
                                                        @RequestPart(value = "images", required = false) MultipartFile[] images,
@@ -59,12 +68,14 @@ public class ProductController {
         return ResponseUtility.buildResponse(String.format(ResponseMessage.UPDATE_SUCCESS, "Product"), OK);
     }
 
+    @ProductDeletePermission
     @DeleteMapping("/{productId}")
     private ResponseEntity<HttpResponse> deleteProduct(@PathVariable Long productId){
         productService.deleteProduct(productId);
         return ResponseUtility.buildResponse(String.format(ResponseMessage.DELETE_SUCCESS, "Product"), OK);
     }
 
+    @ProductReadPermission
     @GetMapping("/count")
     private ResponseEntity<ProductStatisticsDTO> getProductsCount(){
         return new ResponseEntity<>(productService.getProductsCount(), OK);
