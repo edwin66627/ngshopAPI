@@ -34,34 +34,32 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @ProductReadPermission
     @PostMapping("/list")
-    private ResponseEntity<Page<ProductDTO>> listProducts(@RequestBody ProductSearchCriteriaDTO productSearchCriteriaDTO){
+    public ResponseEntity<Page<ProductDTO>> listProducts(@RequestBody ProductSearchCriteriaDTO productSearchCriteriaDTO){
         return new ResponseEntity<>(productService.listProducts(productSearchCriteriaDTO), OK);
     }
 
     @ProductReadPermission
     @GetMapping("/{productId}")
-    private ResponseEntity<ProductDTO> getProduct(@PathVariable Long productId){
+    public ResponseEntity<ProductDTO> getProduct(@PathVariable Long productId){
         return new ResponseEntity<>(productService.getProduct(productId), OK);
     }
 
-    @ProductReadPermission
     @GetMapping("/{productId}/category")
-    private ResponseEntity<ProductDTO> getProductWithCategory(@PathVariable Long productId){
+    public ResponseEntity<ProductDTO> getProductWithCategory(@PathVariable Long productId){
         return new ResponseEntity<>(productService.getProductWithCategory(productId), OK);
     }
 
     @ProductCreatePermission
     @PostMapping("/new")
-    private ResponseEntity<ProductDTO> createProduct(@RequestPart("product") ProductDTO productDTO,
+    public ResponseEntity<ProductDTO> createProduct(@RequestPart("product") ProductDTO productDTO,
                                                      @RequestPart("images") MultipartFile[] images){
         return new ResponseEntity<>(productService.createProduct(productDTO, images), CREATED);
     }
 
     @ProductUpdatePermission
     @PutMapping("/{productId}")
-    private ResponseEntity<HttpResponse> updateProduct(@Valid @RequestPart("product") ProductDTO productDTO,
+    public ResponseEntity<HttpResponse> updateProduct(@Valid @RequestPart("product") ProductDTO productDTO,
                                                        @RequestPart(value = "images", required = false) MultipartFile[] images,
                                                        @PathVariable Long productId){
         productService.updateProduct(productDTO,images, productId);
@@ -70,19 +68,19 @@ public class ProductController {
 
     @ProductDeletePermission
     @DeleteMapping("/{productId}")
-    private ResponseEntity<HttpResponse> deleteProduct(@PathVariable Long productId){
+    public ResponseEntity<HttpResponse> deleteProduct(@PathVariable Long productId){
         productService.deleteProduct(productId);
         return ResponseUtility.buildResponse(String.format(ResponseMessage.DELETE_SUCCESS, "Product"), OK);
     }
 
     @ProductReadPermission
     @GetMapping("/count")
-    private ResponseEntity<ProductStatisticsDTO> getProductsCount(){
+    public ResponseEntity<ProductStatisticsDTO> getProductsCount(){
         return new ResponseEntity<>(productService.getProductsCount(), OK);
     }
 
     @GetMapping("/featured")
-    private ResponseEntity<List<ProductStatisticsDTO>> getFeaturedProducts(){
+    public ResponseEntity<List<ProductStatisticsDTO>> getFeaturedProducts(){
         return null;//new ResponseEntity<>(productService.getProductsCount(), OK);
     }
 

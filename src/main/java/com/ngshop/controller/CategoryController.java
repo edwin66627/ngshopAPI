@@ -30,35 +30,33 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    @CategoryReadPermission
     @GetMapping("/list")
-    private ResponseEntity<List<CategoryDTO>> listCategories(){
+    public ResponseEntity<List<CategoryDTO>> listCategories(){
         List<CategoryDTO> categories = categoryService.listCategories();
         return new ResponseEntity<>(categories, OK);
     }
 
-    @CategoryReadPermission
     @GetMapping("/{categoryId}")
-    private ResponseEntity<CategoryDTO> getCategory(@PathVariable Long categoryId){
+    public ResponseEntity<CategoryDTO> getCategory(@PathVariable Long categoryId){
         return new ResponseEntity<>(categoryService.getCategory(categoryId), OK);
     }
 
     @CategoryCreatePermission
     @PostMapping("/new")
-    private ResponseEntity<CategoryDTO> createCategory(@Valid @RequestBody CategoryDTO categoryDTO){
+    public ResponseEntity<CategoryDTO> createCategory(@Valid @RequestBody CategoryDTO categoryDTO){
         return new ResponseEntity<>(categoryService.createCategory(categoryDTO), CREATED);
     }
 
     @CategoryUpdatePermission
     @PutMapping("/{categoryId}")
-    private ResponseEntity<HttpResponse> updateCategory(@Valid @RequestBody CategoryDTO categoryDTO, @PathVariable Long categoryId){
+    public ResponseEntity<HttpResponse> updateCategory(@Valid @RequestBody CategoryDTO categoryDTO, @PathVariable Long categoryId){
         categoryService.updateCategory(categoryDTO,categoryId);
         return ResponseUtility.buildResponse(String.format(ResponseMessage.UPDATE_SUCCESS, "Category"), OK);
     }
 
     @CategoryDeletePermission
     @DeleteMapping("/{categoryId}")
-    private ResponseEntity<HttpResponse> updateCategory(@PathVariable Long categoryId){
+    public ResponseEntity<HttpResponse> updateCategory(@PathVariable Long categoryId){
         categoryService.deleteCategory(categoryId);
         return ResponseUtility.buildResponse(String.format(ResponseMessage.DELETE_SUCCESS, "Category"), OK);
     }

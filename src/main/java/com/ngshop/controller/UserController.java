@@ -33,26 +33,26 @@ public class UserController {
 
     @UserReadPermission
     @PostMapping("/list")
-    private ResponseEntity<Page<UserDTO>> listUsers(@RequestBody PaginatedRequestDTO paginatedRequestDTO){
+    public ResponseEntity<Page<UserDTO>> listUsers(@RequestBody PaginatedRequestDTO paginatedRequestDTO){
         return new ResponseEntity<>(userService.listUsers(paginatedRequestDTO), OK);
     }
 
     @UserReadPermission
     @GetMapping("/{userId}")
-    private ResponseEntity<UserDTO> getUser(@PathVariable Long userId){
+    public ResponseEntity<UserDTO> getUser(@PathVariable Long userId){
         return new ResponseEntity<>(userService.getUser(userId), OK);
     }
 
     @UserUpdatePermission
     @PutMapping("/{userId}")
-    private ResponseEntity<HttpResponse> updateUser(@Valid @RequestBody UserDTO userDTO, @PathVariable Long userId){
+    public ResponseEntity<HttpResponse> updateUser(@Valid @RequestBody UserDTO userDTO, @PathVariable Long userId){
         userService.updateUser(userDTO, userId);
         return ResponseUtility.buildResponse(String.format(ResponseMessage.UPDATE_SUCCESS, "User"), OK);
     }
 
     @UserDeletePermission
     @DeleteMapping("/{userId}")
-    private ResponseEntity<HttpResponse> deleteProduct(@PathVariable Long userId){
+    public ResponseEntity<HttpResponse> deleteProduct(@PathVariable Long userId){
         userService.deleteUser(userId);
         return ResponseUtility.buildResponse(String.format(ResponseMessage.DELETE_SUCCESS, "User"), OK);
     }

@@ -23,7 +23,7 @@ public class StatisticsController {
 
     @StatisticsReadPermission
     @PostMapping("/")
-    private ResponseEntity<StatisticsDTO> getDashboardStatistics(@RequestBody StatisticsRequestDTO requestDTO) {
+    public ResponseEntity<StatisticsDTO> getDashboardStatistics(@RequestBody StatisticsRequestDTO requestDTO) {
         return new ResponseEntity<>(statisticsService.getDashboardStatistics(requestDTO), OK);
     }
 

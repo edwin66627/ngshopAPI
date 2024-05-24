@@ -24,7 +24,7 @@ public class RoleController {
 
     @RoleReadPermission
     @GetMapping("/list")
-    private ResponseEntity<List<RoleDTO>> listRoles(){
+    public ResponseEntity<List<RoleDTO>> listRoles(){
         return new ResponseEntity<>(roleService.listRoles(), OK);
     }
 }
